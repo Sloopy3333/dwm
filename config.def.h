@@ -72,7 +72,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run"};
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 
 #include "movestack.c"
 static Key keys[] = {
@@ -87,6 +87,12 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,                         spawn,          SHCMD("pcmanfm") },
 	{ MODKEY,                       XK_m,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(mu4e)'") },
 	{ MODKEY,                       XK_r,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(elfeed)'") },
+	{ MODKEY,                       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
+	{ MODKEY,                       XK_p,                         spawn,          SHCMD("~/scripts/dbw") },
+	{ MODKEY|ShiftMask,             XK_s,                         spawn,          SHCMD("~/scripts/dsearch") },
+	{ MODKEY|ShiftMask,             XK_p,                         spawn,          SHCMD("~/scripts/dkill") },
+	{ MODKEY,                       XK_F1,                        spawn,          SHCMD("~/scripts/walli") },
+
 
 	// layout modification
 	{ MODKEY|ControlMask,           XK_f,                         togglebar,      {0} },
@@ -125,6 +131,19 @@ static Key keys[] = {
 	// backlight control
         {0,                             XF86XK_MonBrightnessUp,       spawn,          SHCMD("xbacklight -inc +5 >/dev/null; kill -45 $(pidof dwmblocks)")},
         {0,                             XF86XK_MonBrightnessDown,     spawn,          SHCMD("xbacklight -dec +5- >/dev/null; kill -45 $(pidof dwmblocks)")},
+
+	// screenshot
+	{ 0,                            XK_Print,                     spawn,          SHCMD("~/scripts/sc") },
+	{ MODKEY,                       XK_Print,                     spawn,          SHCMD("~/scripts/sc -w") },
+	{ MODKEY|ShiftMask,             XK_Print,                     spawn,          SHCMD("~/scripts/sc -s") },
+	{ MODKEY|ControlMask,           XK_Print,                     spawn,          SHCMD("~/scripts/sc -c") },
+	{ MODKEY|ControlMask|ShiftMask, XK_Print,                     spawn,          SHCMD("~/scripts/sc -cs") },
+
+	// music control
+	{ 0,                            XF86XK_AudioPrev,	      spawn,	      SHCMD("mpc prev") },
+	{ 0,                            XF86XK_AudioNext,	      spawn,	      SHCMD("mpc next") },
+      	{ 0,                            XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc pause") },
+      	{ MODKEY,                       XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc play") },
 
 	// workspace switching
 	TAGKEYS(                        XK_1,                      0)
