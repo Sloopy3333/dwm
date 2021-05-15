@@ -74,6 +74,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run"};
 static const char *termcmd[]  = { "alacritty", NULL };
 
+#include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key                           function        argument */
 	// launching and killing application
@@ -97,6 +98,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,                         focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,                         focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_Return,                    zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_j,                         movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,                         movestack,      {.i = -1 } },
 
 	// window resizing
 	{ MODKEY,                       XK_h,                         setmfact,       {.f = -0.05} },
