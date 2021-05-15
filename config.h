@@ -39,7 +39,6 @@ static const int resizehints = 0;    /* 1 means respect size hints in tiled resi
 static const Layout layouts[] = {
 	/* symbol     arrange function */
         { "Tall",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "Full",      monocle },
 };
 
@@ -71,7 +70,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_n,  setlayout,      {0} },
+	{ MODKEY,                       XK_n,      setlayout,      {0} },
 	{ MODKEY|ControlMask,           XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -80,6 +79,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_c,      quit,           {0} },
+	{ MODKEY,                       XK_c,      quit,           {1} }, 
 	{ MODKEY,                       XK_b,      spawn,          SHCMD("brave") },
 	{ MODKEY,                       XK_e,      spawn,          SHCMD("emacsclient -c -a emacs") },
 	{ MODKEY,                       XK_f,      spawn,          SHCMD("emacsclient -c -a '' --eval '(dired nil)'") },
