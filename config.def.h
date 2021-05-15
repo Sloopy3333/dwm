@@ -40,6 +40,8 @@ static const Layout layouts[] = {
 	/* symbol     arrange function */
         { "Tall",      tile },    /* first entry is default */
 	{ "Full",      monocle },
+  	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ NULL,       NULL },
 };
 
 /* key definitions */
@@ -70,7 +72,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_n,      setlayout,      {0} },
+        { MODKEY,		        XK_n,      cyclelayout,    {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_n,      cyclelayout,    {.i = +1 } },
+        { MODKEY,                       XK_n,      setlayout,      {0} },
 	{ MODKEY|ControlMask,           XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
