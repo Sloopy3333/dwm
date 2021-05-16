@@ -1,6 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx        = 2;        /* border pixel of windows */
 static const unsigned int snap            = 32;       /* snap pixel */
@@ -14,16 +15,14 @@ static const int showbar                  = 1;        /* 0 means no bar */
 static const int topbar                   = 1;        /* 0 means bottom bar */
 static const int user_bh                  = 20;       /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
 static const char *fonts[]                = {"Hack Nerd Font:size=11:antialias=true:autohint=true"};
-static const char col_bg[]                = "#002b36";
-static const char col_fg[]                = "#fdf6e3";
-static const char col_orange[]            = "#cb4b16";
-static const char col_yellow[]            = "#b58900";
-static const char col_red[]               = "#dc322f";
-static const char col_magenta[]           = "#d33682";
-static const char col_violet[]            = "#6c71c4";
-static const char col_blue[]              = "#268bd2";
-static const char col_cyan[]              = "#2aa198";
-static const char col_green[]             = "#859900";
+static const char col_bg[]                = "#282828";
+static const char col_fg[]                = "#ebdbb2";
+static const char col_red[]               = "#fb4934";
+static const char col_green[]             = "#b8bb26";
+static const char col_yellow[]            = "#fabd2f";
+static const char col_blue[]              = "#83a598";
+static const char col_purple[]           =  "#d3869b";
+static const char col_orange[]            = "#fe8019";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -142,8 +141,7 @@ static Key keys[] = {
 	// music control
 	{ 0,                            XF86XK_AudioPrev,	      spawn,	      SHCMD("mpc prev") },
 	{ 0,                            XF86XK_AudioNext,	      spawn,	      SHCMD("mpc next") },
-      	{ 0,                            XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc pause") },
-      	{ MODKEY,                       XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc play") },
+      	{ 0,                            XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc toggle") },
 
 	// workspace switching
 	TAGKEYS(                        XK_1,                      0)
