@@ -1,6 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx        = 2;        /* border pixel of windows */
 static const unsigned int snap            = 32;       /* snap pixel */
@@ -14,16 +15,14 @@ static const int showbar                  = 1;        /* 0 means no bar */
 static const int topbar                   = 1;        /* 0 means bottom bar */
 static const int user_bh                  = 20;       /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
 static const char *fonts[]                = {"Hack Nerd Font:size=11:antialias=true:autohint=true"};
-static const char col_bg[]                = "#002b36";
-static const char col_fg[]                = "#fdf6e3";
-static const char col_orange[]            = "#cb4b16";
-static const char col_yellow[]            = "#b58900";
-static const char col_red[]               = "#dc322f";
-static const char col_magenta[]           = "#d33682";
-static const char col_violet[]            = "#6c71c4";
-static const char col_blue[]              = "#268bd2";
-static const char col_cyan[]              = "#2aa198";
-static const char col_green[]             = "#859900";
+static const char col_bg[]                = "#282828";
+static const char col_fg[]                = "#ebdbb2";
+static const char col_red[]               = "#fb4934";
+static const char col_green[]             = "#b8bb26";
+static const char col_yellow[]            = "#fabd2f";
+static const char col_blue[]              = "#83a598";
+static const char col_purple[]           =  "#d3869b";
+static const char col_orange[]            = "#fe8019";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -72,8 +71,9 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run"};
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 
+#include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key                           function        argument */
 	// launching and killing application
@@ -86,6 +86,12 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,                         spawn,          SHCMD("pcmanfm") },
 	{ MODKEY,                       XK_m,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(mu4e)'") },
 	{ MODKEY,                       XK_r,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(elfeed)'") },
+	{ MODKEY,                       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
+	{ MODKEY,                       XK_p,                         spawn,          SHCMD("~/scripts/dbw") },
+	{ MODKEY|ShiftMask,             XK_s,                         spawn,          SHCMD("~/scripts/dsearch") },
+	{ MODKEY|ShiftMask,             XK_p,                         spawn,          SHCMD("~/scripts/dkill") },
+	{ MODKEY,                       XK_F1,                        spawn,          SHCMD("~/scripts/walli") },
+
 
 	// layout modification
 	{ MODKEY|ControlMask,           XK_f,                         togglebar,      {0} },
@@ -97,6 +103,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,                         focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,                         focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_Return,                    zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_j,                         movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,                         movestack,      {.i = -1 } },
 
 	// window resizing
 	{ MODKEY,                       XK_h,                         setmfact,       {.f = -0.05} },
@@ -122,6 +130,18 @@ static Key keys[] = {
 	// backlight control
         {0,                             XF86XK_MonBrightnessUp,       spawn,          SHCMD("xbacklight -inc +5 >/dev/null; kill -45 $(pidof dwmblocks)")},
         {0,                             XF86XK_MonBrightnessDown,     spawn,          SHCMD("xbacklight -dec +5- >/dev/null; kill -45 $(pidof dwmblocks)")},
+
+	// screenshot
+	{ 0,                            XK_Print,                     spawn,          SHCMD("~/scripts/sc") },
+	{ MODKEY,                       XK_Print,                     spawn,          SHCMD("~/scripts/sc -w") },
+	{ MODKEY|ShiftMask,             XK_Print,                     spawn,          SHCMD("~/scripts/sc -s") },
+	{ MODKEY|ControlMask,           XK_Print,                     spawn,          SHCMD("~/scripts/sc -c") },
+	{ MODKEY|ControlMask|ShiftMask, XK_Print,                     spawn,          SHCMD("~/scripts/sc -cs") },
+
+	// music control
+	{ 0,                            XF86XK_AudioPrev,	      spawn,	      SHCMD("mpc prev") },
+	{ 0,                            XF86XK_AudioNext,	      spawn,	      SHCMD("mpc next") },
+      	{ 0,                            XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc toggle") },
 
 	// workspace switching
 	TAGKEYS(                        XK_1,                      0)

@@ -4,6 +4,7 @@
 
 /* appearance */
 static const unsigned int borderpx        = 2;        /* border pixel of windows */
+static const unsigned int gappx           = 5;        /* gaps between windows */
 static const unsigned int snap            = 32;       /* snap pixel */
 static const unsigned int systraypinning  = 0;        /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft   = 0;        /* 0: systray in the right corner, >0: systray on left of status text */
@@ -27,7 +28,7 @@ static const char col_orange[]            = "#fe8019";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg,    col_bg,  col_bg },
-	[SchemeSel]  = { col_blue, col_bg,  col_yellow },
+	[SchemeSel]  = { col_blue, col_bg,  col_orange },
 };
 
 /* tagging */
@@ -109,6 +110,11 @@ static Key keys[] = {
 	// window resizing
 	{ MODKEY,                       XK_h,                         setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,                         setmfact,       {.f = +0.05} },
+
+	// gaps
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 
 	// window taging
 	{ MODKEY,                       XK_Tab,                       view,           {0} },
