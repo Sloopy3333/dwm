@@ -28,7 +28,7 @@ static const char col_orange[]            = "#fe8019";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg,    col_bg,  col_bg },
-	[SchemeSel]  = { col_blue, col_bg,  col_orange },
+	[SchemeSel]  = { col_yellow, col_bg,  col_orange },
 };
 
 /* tagging */

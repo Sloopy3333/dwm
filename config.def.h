@@ -28,7 +28,7 @@ static const char col_orange[]            = "#fe8019";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg,    col_bg,  col_bg },
-	[SchemeSel]  = { col_blue, col_bg,  col_orange },
+	[SchemeSel]  = { col_yellow, col_bg,  col_orange },
 };
 
 /* tagging */
@@ -95,7 +95,6 @@ static Key keys[] = {
 
 
 	// layout modification
-	{ MODKEY|ControlMask,           XK_f,                         togglebar,      {0} },
         { MODKEY,		        XK_n,                         cyclelayout,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_n,                         cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_space,                     togglefloating, {0} },
@@ -111,7 +110,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_h,                         setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,                         setmfact,       {.f = +0.05} },
 
-	// gaps
+	// gaps and full screen
+	{ MODKEY|ControlMask,           XK_f,                         togglebar,      {0} },
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
