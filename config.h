@@ -60,12 +60,11 @@ static const Layout layouts[] = {
 
 /* key definitions */
 #define MODKEY Mod4Mask
-#define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
-
+#define TAGKEYS(CHAIN,KEY,TAG) \
+	{ MODKEY,                       CHAIN,    KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask,           CHAIN,    KEY,      toggleview,     {.ui = 1 << TAG} }, \
+	{ MODKEY|ShiftMask,             CHAIN,    KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|ShiftMask, CHAIN,    KEY,      toggletag,      {.ui = 1 << TAG} },
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
@@ -76,89 +75,103 @@ static const char *termcmd[]  = { "st", NULL };
 
 #include "movestack.c"
 static Key keys[] = {
-	/* modifier                     key                           function        argument */
+	/* modifier                    chainkey  key                           function        argument */
+
 	// launching and killing application
-	{ MODKEY,                       XK_space,                     spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_t,                         spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_q,                         killclient,     {0} },
-	{ MODKEY,                       XK_b,                         spawn,          SHCMD("brave") },
-	{ MODKEY,                       XK_e,                         spawn,          SHCMD("emacsclient -c -a emacs") },
-	{ MODKEY,                       XK_f,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(dired nil)'") },
-	{ MODKEY|ShiftMask,             XK_f,                         spawn,          SHCMD("pcmanfm") },
-	{ MODKEY,                       XK_m,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(mu4e)'") },
-	{ MODKEY,                       XK_r,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(elfeed)'") },
-	{ MODKEY,                       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
-	{ MODKEY,                       XK_p,                         spawn,          SHCMD("~/scripts/dbw") },
-	{ MODKEY|ShiftMask,             XK_s,                         spawn,          SHCMD("~/scripts/dsearch") },
-	{ MODKEY|ShiftMask,             XK_p,                         spawn,          SHCMD("~/scripts/dkill") },
-	{ MODKEY,                       XK_F1,                        spawn,          SHCMD("~/scripts/walli") },
+           { MODKEY,                       -1,         XK_space,                     spawn,          {.v = dmenucmd } },
+           { MODKEY,                       -1,         XK_t,                         spawn,          {.v = termcmd } },
+           { MODKEY,                       -1,         XK_q,                         killclient,     {0} },
+           { MODKEY,                       -1,         XK_b,                         spawn,          SHCMD("vimb") },
+           { MODKEY|ShiftMask,             -1,         XK_b,                         spawn,          SHCMD("brave") },
+           { MODKEY,                       -1,         XK_e,                         spawn,          SHCMD("emacsclient -c -a emacs") },
+           { MODKEY,                       -1,         XK_f,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(dired nil)'") },
+           { MODKEY|ShiftMask,             -1,         XK_f,                         spawn,          SHCMD("pcmanfm") },
+           { MODKEY,                       -1,         XK_m,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(mu4e)'") },
+           { MODKEY,                       -1,         XK_r,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(elfeed)'") },
 
 
-	// layout modification
-	{ MODKEY|ControlMask,           XK_f,                         togglebar,      {0} },
-        { MODKEY,		        XK_n,                         cyclelayout,    {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_n,                         cyclelayout,    {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_space,                     togglefloating, {0} },
 
-	// switching window focus
-	{ MODKEY,                       XK_j,                         focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,                         focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_Return,                    zoom,           {0} },
-	{ MODKEY|ShiftMask,             XK_j,                         movestack,      {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,                         movestack,      {.i = -1 } },
+           // layout modification
+           { MODKEY,		           -1,         XK_n,                         cyclelayout,    {.i = +1 } },
+           { MODKEY|ShiftMask,             -1,         XK_n,                         cyclelayout,    {.i = -1 } },
+           { MODKEY|ControlMask,           -1,         XK_space,                     togglefloating, {0} },
 
-	// window resizing
-	{ MODKEY,                       XK_h,                         setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,                         setmfact,       {.f = +0.05} },
+           // switching window focus	  ,
+           { MODKEY,                       -1,         XK_j,                         focusstack,     {.i = +1 } },
+           { MODKEY,                       -1,         XK_k,                         focusstack,     {.i = -1 } },
+           { MODKEY,                       -1,         XK_Return,                    zoom,           {0} },
+           { MODKEY|ShiftMask,             -1,         XK_j,                         movestack,      {.i = +1 } },
+           { MODKEY|ShiftMask,             -1,         XK_k,                         movestack,      {.i = -1 } },
 
-	// gaps
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+           // window resizing		  ,
+           { MODKEY,                       -1,         XK_h,                         setmfact,       {.f = -0.05} },
+           { MODKEY,                       -1,         XK_l,                         setmfact,       {.f = +0.05} },
 
-	// window taging
-	{ MODKEY,                       XK_Tab,                       view,           {0} },
-	{ MODKEY,                       XK_0,                         view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,                         tag,            {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_comma,                     tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period,                    tagmon,         {.i = +1 } },
+           // gaps and full screen		  ,
+           { MODKEY|ControlMask,           -1,         XK_f,                         togglebar,      {0} },
+           { MODKEY,                       -1,         XK_minus,  setgaps,        {.i = -1 } },
+           { MODKEY,                       -1,         XK_equal,  setgaps,        {.i = +1 } },
+           { MODKEY|ShiftMask,             -1,         XK_equal,  setgaps,        {.i = 0  } },
 
-	// restart and quit dwm
-	{ MODKEY|ShiftMask,             XK_c,                         quit,           {0} },
-	{ MODKEY,                       XK_c,                         quit,           {1} }, 
+           // window taging		  ,
+           { MODKEY,                       -1,         XK_Tab,                       view,           {0} },
+           { MODKEY,                       -1,         XK_0,                         view,           {.ui = ~0 } },
+           { MODKEY|ShiftMask,             -1,         XK_0,                         tag,            {.ui = ~0 } },
+           { MODKEY|ShiftMask,             -1,         XK_comma,                     tagmon,         {.i = -1 } },
+           { MODKEY|ShiftMask,             -1,         XK_period,                    tagmon,         {.i = +1 } },
 
+           // restart and quit dwm		  ,
+           { MODKEY|ShiftMask,             -1,         XK_c,                         quit,           {0} },
+           { MODKEY,                       -1,         XK_c,                         quit,           {1} }, 
 
-	// volume control
-        {0,                             XF86XK_AudioRaiseVolume,      spawn,          SHCMD("amixer set Master 5%+ > /dev/null; kill -44 $(pidof dwmblocks)")},
-        {0,                             XF86XK_AudioLowerVolume,      spawn,          SHCMD("amixer set Master 5%- > /dev/null; kill -44 $(pidof dwmblocks)")},
-        {0,                             XF86XK_AudioMute,             spawn,          SHCMD("amixer set Master toggle > /dev/null; kill -44 $(pidof dwmblocks)")},
+	   // dmenu keychords
+           { MODKEY,                       XK_d,       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
+           { MODKEY,                       XK_d,       XK_p,                         spawn,          SHCMD("~/scripts/dbw") },
+           { MODKEY,                       XK_d,       XK_m,                         spawn,          SHCMD("~/scripts/dman") },
+           { MODKEY,                       XK_d,       XK_k,                         spawn,          SHCMD("~/scripts/dkill") },
+           { MODKEY,                       XK_d,       XK_c,                         spawn,          SHCMD("~/scripts/dcol") },
 
-	// backlight control
-        {0,                             XF86XK_MonBrightnessUp,       spawn,          SHCMD("xbacklight -inc +5 >/dev/null; kill -45 $(pidof dwmblocks)")},
-        {0,                             XF86XK_MonBrightnessDown,     spawn,          SHCMD("xbacklight -dec +5- >/dev/null; kill -45 $(pidof dwmblocks)")},
+	   // dsearch keychord
+           { MODKEY,                       XK_s,       XK_s,                         spawn,          SHCMD("~/scripts/dsearch") },
+           { MODKEY,                       XK_s,       XK_a,                         spawn,          SHCMD("~/scripts/dsearch archkwiki") },
+           { MODKEY,                       XK_s,       XK_p,                         spawn,          SHCMD("~/scripts/dsearch aur") },
+           { MODKEY,                       XK_s,       XK_d,                         spawn,          SHCMD("~/scripts/dsearch duckduckgo") },
+           { MODKEY,                       XK_s,       XK_g,                         spawn,          SHCMD("~/scripts/dsearch google") },
+           { MODKEY,                       XK_s,       XK_r,                         spawn,          SHCMD("~/scripts/dsearch reddit") },
+           { MODKEY,                       XK_s,       XK_u,                         spawn,          SHCMD("~/scripts/dsearch urbandictionary") },
+           { MODKEY,                       XK_s,       XK_y,                         spawn,          SHCMD("~/scripts/dsearch youtube") },
 
-	// screenshot
-	{ 0,                            XK_Print,                     spawn,          SHCMD("~/scripts/sc") },
-	{ MODKEY,                       XK_Print,                     spawn,          SHCMD("~/scripts/sc -w") },
-	{ MODKEY|ShiftMask,             XK_Print,                     spawn,          SHCMD("~/scripts/sc -s") },
-	{ MODKEY|ControlMask,           XK_Print,                     spawn,          SHCMD("~/scripts/sc -c") },
-	{ MODKEY|ControlMask|ShiftMask, XK_Print,                     spawn,          SHCMD("~/scripts/sc -cs") },
+           // volume control		  ,
+           {0,                             -1,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("amixer set Master 5%+ > /dev/null; kill -44 $(pidof dwmblocks)")},
+           {0,                             -1,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("amixer set Master 5%- > /dev/null; kill -44 $(pidof dwmblocks)")},
+           {0,                             -1,         XF86XK_AudioMute,             spawn,          SHCMD("amixer set Master toggle > /dev/null; kill -44 $(pidof dwmblocks)")},
+	   
+           // backlight control		  ,
+           {0,                             -1,         XF86XK_MonBrightnessUp,       spawn,          SHCMD("xbacklight -inc +5 >/dev/null; kill -45 $(pidof dwmblocks)")},
+           {0,                             -1,         XF86XK_MonBrightnessDown,     spawn,          SHCMD("xbacklight -dec +5- >/dev/null; kill -45 $(pidof dwmblocks)")},
 
-	// music control
-	{ 0,                            XF86XK_AudioPrev,	      spawn,	      SHCMD("mpc prev") },
-	{ 0,                            XF86XK_AudioNext,	      spawn,	      SHCMD("mpc next") },
-      	{ 0,                            XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc toggle") },
+           // screenshot			  ,
+           { 0,                            -1,         XK_Print,                     spawn,          SHCMD("~/scripts/sc") },
+           { MODKEY,                       -1,         XK_Print,                     spawn,          SHCMD("~/scripts/sc -w") },
+           { MODKEY|ShiftMask,             -1,         XK_Print,                     spawn,          SHCMD("~/scripts/sc -s") },
+           { MODKEY|ControlMask,           -1,         XK_Print,                     spawn,          SHCMD("~/scripts/sc -c") },
+           { MODKEY|ControlMask|ShiftMask, -1,         XK_Print,                     spawn,          SHCMD("~/scripts/sc -cs") },
 
-	// workspace switching
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
+           // music control		  ,
+           { 0,                            -1,         XF86XK_AudioPrev,	      spawn,	      SHCMD("mpc prev") },
+           { 0,                            -1,         XF86XK_AudioNext,	      spawn,	      SHCMD("mpc next") },
+           { 0,                            -1,         XF86XK_AudioPlay,	      spawn,	      SHCMD("mpc toggle") },
+
+           // workspace switching		  ,
+           TAGKEYS(                        -1,         XK_1,                      0)
+           TAGKEYS(                        -1,         XK_2,                      1)
+           TAGKEYS(                        -1,         XK_3,                      2)
+           TAGKEYS(                        -1,         XK_4,                      3)
+           TAGKEYS(                        -1,         XK_5,                      4)
+           TAGKEYS(                        -1,         XK_6,                      5)
+           TAGKEYS(                        -1,         XK_7,                      6)
+           TAGKEYS(                        -1,         XK_8,                      7)
+           TAGKEYS(                        -1,         XK_9,                      8)
 };
 
 /* button definitions */
