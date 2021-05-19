@@ -39,13 +39,15 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-	{ "St",      NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	/* class     instance  title               tags mask  isfloating  isterminal  noswallow  monitor   scratchkey*/
+  { "Gimp",     NULL,       NULL,            0,            1,         0,          0,       -1,          0 },
+  { "firefox",  NULL,       NULL,            1 << 8,       0,         0,         -1,       -1,          0 },
+  { "St",      NULL,        NULL,            0,            0,         1,          0,       -1,          0 },
+  { NULL,       NULL,       "termpad",    0,            1,         0,          0,       -1,          's'},
+  { NULL,       NULL,       "scratchpad",    0,            1,         0,          0,       -1,          's'},
+  { NULL,       NULL,       "scratchpad",    0,            1,         0,          0,       -1,          's'},
+  { NULL,       NULL,       "Event Tester",  0,            0,         0,          1,       -1,          0 }, /* xev */
 };
-
 /* layout(s) */
 static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
@@ -72,6 +74,10 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run"};
 static const char *termcmd[]  = { "st", NULL };
+/*First arg only serves to match against key in rules*/
+static const char *termpad[] = {"s", "st", "-t", "scratchpad", NULL};
+static const char *toppad[] = {"s", "st", "-t", "scratchpad", "-e", "htop", NULL};
+static const char *musicpad[] = {"s", "st","-t","scratchpad", "-e", "ncmpcpp", NULL};
 
 #include "movestack.c"
 static Key keys[] = {
@@ -92,7 +98,7 @@ static Key keys[] = {
 
 
            // layout modification
-           { MODKEY,		           -1,         XK_n,                         cyclelayout,    {.i = +1 } },
+           { MODKEY,		               -1,         XK_n,                         cyclelayout,    {.i = +1 } },
            { MODKEY|ShiftMask,             -1,         XK_n,                         cyclelayout,    {.i = -1 } },
            { MODKEY|ControlMask,           -1,         XK_space,                     togglefloating, {0} },
 
@@ -122,7 +128,7 @@ static Key keys[] = {
 
            // restart and quit dwm		  ,
            { MODKEY|ShiftMask,             -1,         XK_c,                         quit,           {0} },
-           { MODKEY,                       -1,         XK_c,                         quit,           {1} }, 
+           { MODKEY,                       -1,         XK_c,                         quit,           {1} },
 
 	   // dmenu keychords
            { MODKEY,                       XK_d,       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
@@ -141,11 +147,16 @@ static Key keys[] = {
            { MODKEY,                       XK_s,       XK_u,                         spawn,          SHCMD("~/scripts/dsearch urbandictionary") },
            { MODKEY,                       XK_s,       XK_y,                         spawn,          SHCMD("~/scripts/dsearch youtube") },
 
+           // scratchpads
+       	   { MODKEY,                       XK_p,       XK_t,                         togglescratch,  {.v = termpad } },
+       	   { MODKEY,                       XK_p,       XK_h,                         togglescratch,  {.v = toppad } },
+       	   { MODKEY,                       XK_p,       XK_m,                         togglescratch,  {.v = musicpad } },
+
            // volume control		  ,
            {0,                             -1,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("amixer set Master 5%+ > /dev/null; kill -44 $(pidof dwmblocks)")},
            {0,                             -1,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("amixer set Master 5%- > /dev/null; kill -44 $(pidof dwmblocks)")},
            {0,                             -1,         XF86XK_AudioMute,             spawn,          SHCMD("amixer set Master toggle > /dev/null; kill -44 $(pidof dwmblocks)")},
-	   
+
            // backlight control		  ,
            {0,                             -1,         XF86XK_MonBrightnessUp,       spawn,          SHCMD("xbacklight -inc +5 >/dev/null; kill -45 $(pidof dwmblocks)")},
            {0,                             -1,         XF86XK_MonBrightnessDown,     spawn,          SHCMD("xbacklight -dec +5- >/dev/null; kill -45 $(pidof dwmblocks)")},
