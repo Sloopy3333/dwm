@@ -4,7 +4,7 @@
 
 /* appearance */
 static const unsigned int borderpx        = 2;        /* border pixel of windows */
-static const unsigned int gappx           = 5;        /* gaps between windows */
+static const unsigned int gappx           = 0;        /* gaps between windows */
 static const unsigned int snap            = 32;       /* snap pixel */
 static const unsigned int systraypinning  = 0;        /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft   = 0;        /* 0: systray in the right corner, >0: systray on left of status text */
@@ -15,7 +15,7 @@ static const int swallowfloating          = 0;        /* 1 means swallow floatin
 static const int showbar                  = 1;        /* 0 means no bar */
 static const int topbar                   = 1;        /* 0 means bottom bar */
 static const int user_bh                  = 20;       /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
-static const char *fonts[]                = {"Hack Nerd Font:size=11:antialias=true:autohint=true"};
+static const char *fonts[]                = {"Hack Nerd Font:size=11:style=Bold:antialias=true:autohint=true"};
 static const char col_bg[]                = "#282828";
 static const char col_fg[]                = "#ebdbb2";
 static const char col_red[]               = "#fb4934";
@@ -30,7 +30,6 @@ static const char *colors[][3]      = {
 	[SchemeNorm] = { col_fg,    col_bg,  col_bg },
 	[SchemeSel]  = { col_yellow, col_bg,  col_orange },
 };
-
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -39,15 +38,13 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title               tags mask  isfloating  isterminal  noswallow  monitor   scratchkey*/
-  { "Gimp",     NULL,       NULL,            0,            1,         0,          0,       -1,          0 },
-  { "firefox",  NULL,       NULL,            1 << 8,       0,         0,         -1,       -1,          0 },
-  { "St",      NULL,        NULL,            0,            0,         1,          0,       -1,          0 },
-  { NULL,       NULL,       "termpad",    0,            1,         0,          0,       -1,          's'},
-  { NULL,       NULL,       "scratchpad",    0,            1,         0,          0,       -1,          's'},
-  { NULL,       NULL,       "scratchpad",    0,            1,         0,          0,       -1,          's'},
-  { NULL,       NULL,       "Event Tester",  0,            0,         0,          1,       -1,          0 }, /* xev */
+	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
+	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "Mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "st",      NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
+
 /* layout(s) */
 static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
@@ -55,8 +52,8 @@ static const int resizehints = 0;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-        { "Tall",      tile },    /* first entry is default */
-	{ "Full",      monocle },
+	{ "Full",      monocle },/* first entry is default */
+        { "Tall",      tile },
 	{ NULL,       NULL },
 };
 
@@ -74,10 +71,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run"};
 static const char *termcmd[]  = { "st", NULL };
-/*First arg only serves to match against key in rules*/
-static const char *termpad[] = {"s", "st", "-t", "scratchpad", NULL};
-static const char *toppad[] = {"s", "st", "-t", "scratchpad", "-e", "htop", NULL};
-static const char *musicpad[] = {"s", "st","-t","scratchpad", "-e", "ncmpcpp", NULL};
+
 
 #include "movestack.c"
 static Key keys[] = {
@@ -87,9 +81,9 @@ static Key keys[] = {
            { MODKEY,                       -1,         XK_space,                     spawn,          {.v = dmenucmd } },
            { MODKEY,                       -1,         XK_t,                         spawn,          {.v = termcmd } },
            { MODKEY,                       -1,         XK_q,                         killclient,     {0} },
-           { MODKEY,                       -1,         XK_b,                         spawn,          SHCMD("vimb") },
-           { MODKEY|ShiftMask,             -1,         XK_b,                         spawn,          SHCMD("brave") },
-           { MODKEY,                       -1,         XK_e,                         spawn,          SHCMD("emacsclient -c -a emacs") },
+           { MODKEY,                       -1,         XK_b,                         spawn,          SHCMD("librewolf") },
+           { MODKEY|ShiftMask,             -1,         XK_b,                         spawn,          SHCMD("librewolf") },
+           { MODKEY,                       -1,         XK_e,                         spawn,          SHCMD("emacsclient -c -a 'emacs' ") },
            { MODKEY,                       -1,         XK_f,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(dired nil)'") },
            { MODKEY|ShiftMask,             -1,         XK_f,                         spawn,          SHCMD("pcmanfm") },
            { MODKEY,                       -1,         XK_m,                         spawn,          SHCMD("emacsclient -c -a '' --eval '(mu4e)'") },
@@ -98,7 +92,7 @@ static Key keys[] = {
 
 
            // layout modification
-           { MODKEY,		               -1,         XK_n,                         cyclelayout,    {.i = +1 } },
+           { MODKEY,		           -1,         XK_n,                         cyclelayout,    {.i = +1 } },
            { MODKEY|ShiftMask,             -1,         XK_n,                         cyclelayout,    {.i = -1 } },
            { MODKEY|ControlMask,           -1,         XK_space,                     togglefloating, {0} },
 
@@ -113,12 +107,6 @@ static Key keys[] = {
            { MODKEY,                       -1,         XK_h,                         setmfact,       {.f = -0.05} },
            { MODKEY,                       -1,         XK_l,                         setmfact,       {.f = +0.05} },
 
-           // gaps and full screen		  ,
-           { MODKEY|ControlMask,           -1,         XK_f,                         togglebar,      {0} },
-           { MODKEY,                       -1,         XK_minus,  setgaps,        {.i = -1 } },
-           { MODKEY,                       -1,         XK_equal,  setgaps,        {.i = +1 } },
-           { MODKEY|ShiftMask,             -1,         XK_equal,  setgaps,        {.i = 0  } },
-
            // window taging		  ,
            { MODKEY,                       -1,         XK_Tab,                       view,           {0} },
            { MODKEY,                       -1,         XK_0,                         view,           {.ui = ~0 } },
@@ -132,7 +120,7 @@ static Key keys[] = {
 
 	   // dmenu keychords
            { MODKEY,                       XK_d,       XK_s,                         spawn,          SHCMD("~/scripts/dpower") },
-           { MODKEY,                       XK_d,       XK_p,                         spawn,          SHCMD("~/scripts/dbw") },
+           { MODKEY,                       XK_d,       XK_p,                         spawn,          SHCMD("~/scripts/dpass") },
            { MODKEY,                       XK_d,       XK_m,                         spawn,          SHCMD("~/scripts/dman") },
            { MODKEY,                       XK_d,       XK_k,                         spawn,          SHCMD("~/scripts/dkill") },
            { MODKEY,                       XK_d,       XK_c,                         spawn,          SHCMD("~/scripts/dcol") },
@@ -146,11 +134,6 @@ static Key keys[] = {
            { MODKEY,                       XK_s,       XK_r,                         spawn,          SHCMD("~/scripts/dsearch reddit") },
            { MODKEY,                       XK_s,       XK_u,                         spawn,          SHCMD("~/scripts/dsearch urbandictionary") },
            { MODKEY,                       XK_s,       XK_y,                         spawn,          SHCMD("~/scripts/dsearch youtube") },
-
-           // scratchpads
-       	   { MODKEY,                       XK_p,       XK_t,                         togglescratch,  {.v = termpad } },
-       	   { MODKEY,                       XK_p,       XK_h,                         togglescratch,  {.v = toppad } },
-       	   { MODKEY,                       XK_p,       XK_m,                         togglescratch,  {.v = musicpad } },
 
            // volume control		  ,
            {0,                             -1,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("amixer set Master 5%+ > /dev/null; kill -44 $(pidof dwmblocks)")},
